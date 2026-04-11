@@ -6,8 +6,8 @@
  * He left a sticky note: "the slide-back thing is optional probably".
  * It is not optional. Good luck.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Kishore Satheeskumar
+ * @version 1.0
  */
 public class Typist
 {
@@ -17,7 +17,12 @@ public class Typist
     // Another tracks whether the typist is currently burnt out.
     // A third tracks HOW MANY turns of burnout remain (not just whether they are burnt out).
     // The remaining three should be fairly obvious.
-
+    char symbol;
+    String name;
+    double accuracy;
+    boolean burntOut;
+    int charsAlong;
+    int burntTurnsLeft;
 
 
 
@@ -32,7 +37,12 @@ public class Typist
      */
     public Typist(char typistSymbol, String typistName, double typistAccuracy)
     {
-
+        this.symbol = typistSymbol;
+        this.name = typistName;
+        this.accuracy = typistAccuracy;
+        this.burntOut = false;
+        this.charsAlong = 0;
+        this.burntTurnsLeft = 0;
     }
 
 
@@ -46,7 +56,8 @@ public class Typist
      */
     public void burnOut(int turns)
     {
-
+        this.burntOut = true;
+        this.burntTurnsLeft = 5;
     }
 
     /**
@@ -56,7 +67,11 @@ public class Typist
      */
     public void recoverFromBurnout()
     {
-
+        if (this.burntTurnsLeft == 0) {
+            this.burntOut = false;
+        } else {
+            this.burntTurnsLeft -= 1;
+        }
     }
 
     /**
@@ -88,7 +103,7 @@ public class Typist
      */
     public String getName()
     {
-        return ""; // placeholder - replace with correct implementation
+        return this.name; // placeholder - replace with correct implementation
     }
 
     /**
@@ -98,7 +113,7 @@ public class Typist
      */
     public char getSymbol()
     {
-        return ' '; // placeholder - replace with correct implementation
+        return this.symbol; // placeholder - replace with correct implementation
     }
 
     /**
@@ -109,7 +124,7 @@ public class Typist
      */
     public int getBurnoutTurnsRemaining()
     {
-        return 0; // placeholder - replace with correct implementation
+        return this.burntTurnsLeft; // placeholder - replace with correct implementation
     }
 
     /**
@@ -118,7 +133,9 @@ public class Typist
      */
     public void resetToStart()
     {
-
+        this.charsAlong = 0;
+        this.burntOut = false;
+        this.burntTurnsLeft = 0;
     }
 
     /**
@@ -128,7 +145,7 @@ public class Typist
      */
     public boolean isBurntOut()
     {
-        return false; // placeholder - replace with correct implementation
+        return this.burntOut; // placeholder - replace with correct implementation
     }
 
     /**
