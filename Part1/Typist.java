@@ -17,12 +17,12 @@ public class Typist
     // Another tracks whether the typist is currently burnt out.
     // A third tracks HOW MANY turns of burnout remain (not just whether they are burnt out).
     // The remaining three should be fairly obvious.
-    char symbol;
-    String name;
-    double accuracy;
-    boolean burntOut;
-    int charsAlong;
-    int burntTurnsLeft;
+    private String name;
+    private char symbol;
+    private int charsAlong;
+    private boolean burntOut;
+    private double accuracy;
+    private int burntTurnsLeft;
 
 
 
@@ -37,9 +37,9 @@ public class Typist
      */
     public Typist(char typistSymbol, String typistName, double typistAccuracy)
     {
-        this.symbol = typistSymbol;
+        setSymbol(typistSymbol);
         this.name = typistName;
-        this.accuracy = typistAccuracy;
+        setAccuracy(typistAccuracy);
         this.burntOut = false;
         this.charsAlong = 0;
         this.burntTurnsLeft = 0;
@@ -57,7 +57,7 @@ public class Typist
     public void burnOut(int turns)
     {
         this.burntOut = true;
-        this.burntTurnsLeft = 5;
+        this.burntTurnsLeft = turns;
     }
 
     /**
@@ -93,7 +93,7 @@ public class Typist
      */
     public int getProgress()
     {
-        return 0; // placeholder - replace with correct implementation
+        return this.charsAlong; // placeholder - replace with correct implementation
     }
 
     /**
@@ -154,7 +154,9 @@ public class Typist
      */
     public void typeCharacter()
     {
-
+        if (!this.burntOut) {
+            
+        }
     }
 
     /**
@@ -165,7 +167,11 @@ public class Typist
      */
     public void slideBack(int amount)
     {
-
+        if ((this.charsAlong - amount) < 0) {
+            this.charsAlong = 0;
+        } else {
+            this.charsAlong -= amount;
+        }
     }
 
     /**
@@ -176,7 +182,10 @@ public class Typist
      */
     public void setAccuracy(double newAccuracy)
     {
-
+        this.accuracy = newAccuracy;
+        if (this.burntOut) {
+            this.accuracy -= 0.01;
+        }
     }
 
     /**
@@ -186,7 +195,7 @@ public class Typist
      */
     public void setSymbol(char newSymbol)
     {
-
+        this.symbol = newSymbol;
     }
 
 }
