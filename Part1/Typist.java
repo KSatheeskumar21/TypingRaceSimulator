@@ -67,10 +67,11 @@ public class Typist
      */
     public void recoverFromBurnout()
     {
-        if (this.burntTurnsLeft == 0) {
-            this.burntOut = false;
-        } else {
-            this.burntTurnsLeft -= 1;
+        if (this.burntOut) {
+            this.burntTurnsLeft--;
+            if (this.burntTurnsLeft == 0) {
+                this.burntOut = false;
+            }
         }
     }
 
@@ -81,7 +82,7 @@ public class Typist
      */
     public double getAccuracy()
     {
-        return 0.0; // placeholder - replace with correct implementation
+        return this.accuracy; 
     }
 
     /**
@@ -182,9 +183,15 @@ public class Typist
      */
     public void setAccuracy(double newAccuracy)
     {
-        this.accuracy = newAccuracy;
-        if (this.burntOut) {
-            this.accuracy -= 0.01;
+        if (newAccuracy < 0.0) {
+            this.accuracy = 0.0;
+        } else if (newAccuracy > 1.0) {
+            this.accuracy = 1.0;
+        } else {
+            this.accuracy = newAccuracy;
+            if (this.burntOut) {
+                this.accuracy -= 0.01;
+            }
         }
     }
 
