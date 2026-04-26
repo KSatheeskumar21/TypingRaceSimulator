@@ -58,6 +58,7 @@ public class Typist
     {
         this.burntOut = true;
         this.burntTurnsLeft = turns;
+        this.setAccuracy(this.getAccuracy() - 0.01);
     }
 
     /**
@@ -187,9 +188,6 @@ public class Typist
             this.accuracy = 1.0;
         } else {
             this.accuracy = newAccuracy;
-            if (this.burntOut) {
-                this.accuracy -= 0.01;
-            }
         }
     }
 

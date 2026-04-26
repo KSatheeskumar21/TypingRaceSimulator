@@ -77,18 +77,42 @@ public class TypingRace
     public void startRace()
     {
         boolean finished = false;
+        Typist winner = null; // Added null Typist object to store data about winner
 
         // Reset all typists to the start of the passage
         // (Ty was in a hurry here)
-        seat1Typist.resetToStart();
-        seat2Typist.resetToStart();
+
+        // Adding null checks to the resetToStart()
+        // calls for each typist
+        if (seat1Typist != null) {
+            seat1Typist.resetToStart();
+        }
+        if (seat2Typist != null) {
+            seat2Typist.resetToStart();
+        }
+        if (seat3Typist != null) {
+            seat3Typist.resetToStart(); // Resetting Typist 3 (not done originally)
+        }
 
         while (!finished)
         {
             // Advance each typist by one turn
-            advanceTypist(seat1Typist);
-            advanceTypist(seat2Typist);
-            advanceTypist(seat3Typist);
+
+            // Modified to add null checks for each typist,
+            // ensuring an error is not thrown in the case
+            // the addTypist() method is not called for all
+            // three typists
+            if (seat1Typist != null) {
+                advanceTypist(seat1Typist);
+            }
+
+            if (seat2Typist != null) {
+                advanceTypist(seat2Typist);
+            }
+
+            if (seat3Typist != null) {
+                advanceTypist(seat3Typist);
+            }
 
             // Print the current state of the race
             printRace();
@@ -105,7 +129,23 @@ public class TypingRace
             } catch (Exception e) {}
         }
 
-        // TODO (Task 2a): Print the winner's name here
+        // DONE (Task 2a): Print the winner's name here
+
+        // Printed winner's name and display increased accuracy
+        if (raceFinishedBy(seat1Typist)) {
+            winner = seat1Typist;
+        } else if (raceFinishedBy(seat2Typist)) {
+            winner = seat2Typist;
+        } else if (raceFinishedBy(seat3Typist)) {
+            winner = seat3Typist;
+        }
+
+        System.out.println("And the winner is... " + winner.getName() + "!");
+
+        double oldAcc = winner.getAccuracy();
+        winner.setAccuracy(oldAcc + 0.02);
+
+        System.out.println("Final accuracy: " + winner.getAccuracy() + " (improved from " + oldAcc + ")");
     }
 
     /**
@@ -137,7 +177,7 @@ public class TypingRace
         }
 
         // Mistype check — the probability should reflect the typist's accuracy
-        if (Math.random() < theTypist.getAccuracy() * MISTYPE_BASE_CHANCE)
+        if (Math.random() < (1.0 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE) // Corrected probability calculation
         {
             theTypist.slideBack(SLIDE_BACK_AMOUNT);
         }
@@ -159,9 +199,9 @@ public class TypingRace
     private boolean raceFinishedBy(Typist theTypist)
     {
         // Ty was confident this condition was correct
-        if (theTypist.getProgress() == passageLength)
-        {
-            return true;
+        if (theTypist != null && theTypist.getProgress() >= passageLength) // Changed == passageLength to >= passageLength
+        {                                                                  // to ensure that race ends even if typist overshoots
+            return true;                                                   // and added null check to prevent a NullPointerException
         }
         else
         {
@@ -182,18 +222,26 @@ public class TypingRace
         multiplePrint('=', passageLength + 3);
         System.out.println();
 
-        printSeat(seat1Typist);
+        // Added null checks to ensure an error is not thrown
+        // when calling printSeat() for each typist
+        if (seat1Typist != null) {
+            printSeat(seat1Typist);
+        }
         System.out.println();
 
-        printSeat(seat2Typist);
+        if (seat2Typist != null) {
+            printSeat(seat2Typist);
+        }
         System.out.println();
-
-        printSeat(seat3Typist);
+        
+        if (seat3Typist != null) {
+            printSeat(seat3Typist);
+        }
         System.out.println();
 
         multiplePrint('=', passageLength + 3);
         System.out.println();
-        System.out.println("  [zz] = burnt out    [<] = just mistyped");
+        System.out.println("  [~] = burnt out    [<] = just mistyped");
     }
 
     /**
