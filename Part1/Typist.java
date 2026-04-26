@@ -94,7 +94,7 @@ public class Typist
      */
     public int getProgress()
     {
-        return this.charsAlong; // placeholder - replace with correct implementation
+        return this.charsAlong;
     }
 
     /**
@@ -104,7 +104,7 @@ public class Typist
      */
     public String getName()
     {
-        return this.name; // placeholder - replace with correct implementation
+        return this.name;
     }
 
     /**
@@ -114,7 +114,7 @@ public class Typist
      */
     public char getSymbol()
     {
-        return this.symbol; // placeholder - replace with correct implementation
+        return this.symbol;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Typist
      */
     public int getBurnoutTurnsRemaining()
     {
-        return this.burntTurnsLeft; // placeholder - replace with correct implementation
+        return this.burntTurnsLeft;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Typist
      */
     public boolean isBurntOut()
     {
-        return this.burntOut; // placeholder - replace with correct implementation
+        return this.burntOut;
     }
 
     /**
@@ -155,9 +155,7 @@ public class Typist
      */
     public void typeCharacter()
     {
-        if (!this.burntOut) {
-            
-        }
+        this.charsAlong++;
     }
 
     /**
