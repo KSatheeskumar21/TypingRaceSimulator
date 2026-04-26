@@ -51,11 +51,60 @@ public class Part1_test {
         System.out.println("Current progress: " + test_typist.getProgress());
         test_typist.typeCharacter();
         System.out.println("New progress: " + test_typist.getProgress());
+
+        test_typist.resetToStart(); // Resetting typist for slideBack tests
+
+        // Test 6: slideBack() correctly decrements when amount < progress
+        for (int i = 0; i < 10; i++) {
+            test_typist.typeCharacter();
+        }
+
+        System.out.println("Current progress: " + test_typist.getProgress());
+        test_typist.slideBack(2);
+        System.out.println("New progress: " + test_typist.getProgress());
+
+        test_typist.resetToStart();
+
+        
+        // Test 7: slideBack() gives 0 when amount = progress
+        for (int i = 0; i < 10; i++) {
+            test_typist.typeCharacter();
+        }
+
+        System.out.println("Current progress: " + test_typist.getProgress());
+        test_typist.slideBack(10);
+        System.out.println("New progress: " + test_typist.getProgress());
+
+        // Test 8: slideBack() returns same value when amount = 0
+        for (int i = 0; i < 10; i++) {
+            test_typist.typeCharacter();
+        }
+
+        System.out.println("Current progress: " + test_typist.getProgress());
+        test_typist.slideBack(0);
+        System.out.println("New progress: " + test_typist.getProgress());
+
+
+        // Test 9: isBurntOut() returns false on new object
+        Typist test9 = new Typist('①', "TURBOFINGERS", 0.85);
+        System.out.println("Is burnt out: " + test9.isBurntOut());
+
+        // Test 10: setAccuracy(0.0) is accepted (boundary accepted)
+        System.out.println("Original accuracy: " + test_typist.getAccuracy());
+        test_typist.setAccuracy(0.0);
+        System.out.println("New accuracy: " + test_typist.getAccuracy());
+
+        // Test 11: setAccuracy(1.0) is accepted (boundary accepted)
+        System.out.println("Original accuracy: " + test_typist.getAccuracy());
+        test_typist.setAccuracy(1.0);
+        System.out.println("New accuracy: " + test_typist.getAccuracy());
+
+        // Test 12: setAccuracy(0.5) is accepted (value within accepted bounds)
+        System.out.println("Original accuracy: " + test_typist.getAccuracy());
+        test_typist.setAccuracy(0.5);
+        System.out.println("New accuracy: " + test_typist.getAccuracy());
+
+
     }
 
 }
-
-
-// ◦ That resetToStart() clears both progress and burnout state 
-// ◦ That accuracy cannot be set outside the 0.0–1.0 range 
-// ◦ Normal forward movement via typeCharacter()
