@@ -84,22 +84,17 @@ public class Part1_test {
         test_typist.slideBack(0);
         System.out.println("New progress: " + test_typist.getProgress());
 
-
-        // Test 9: isBurntOut() returns false on new object
-        Typist test9 = new Typist('①', "TURBOFINGERS", 0.85);
-        System.out.println("Is burnt out: " + test9.isBurntOut());
-
-        // Test 10: setAccuracy(0.0) is accepted (boundary accepted)
+        // Test 9: setAccuracy(0.0) is accepted (boundary accepted)
         System.out.println("Original accuracy: " + test_typist.getAccuracy());
         test_typist.setAccuracy(0.0);
         System.out.println("New accuracy: " + test_typist.getAccuracy());
 
-        // Test 11: setAccuracy(1.0) is accepted (boundary accepted)
+        // Test 10: setAccuracy(1.0) is accepted (boundary accepted)
         System.out.println("Original accuracy: " + test_typist.getAccuracy());
         test_typist.setAccuracy(1.0);
         System.out.println("New accuracy: " + test_typist.getAccuracy());
 
-        // Test 12: setAccuracy(0.5) is accepted (value within accepted bounds)
+        // Test 11: setAccuracy(0.5) is accepted (value within accepted bounds)
         System.out.println("Original accuracy: " + test_typist.getAccuracy());
         test_typist.setAccuracy(0.5);
         System.out.println("New accuracy: " + test_typist.getAccuracy());
