@@ -21,6 +21,7 @@ public class Typist
     private char symbol;
     private int charsAlong;
     private boolean burntOut;
+    private boolean justMistyped; // New attribute to keep track of recent mistypes
     private double accuracy;
     private int burntTurnsLeft;
 
@@ -41,6 +42,7 @@ public class Typist
         this.name = typistName;
         setAccuracy(typistAccuracy);
         this.burntOut = false;
+        this.justMistyped = false; // Initialising attribute to check mistypes
         this.charsAlong = 0;
         this.burntTurnsLeft = 0;
     }
@@ -130,6 +132,16 @@ public class Typist
     }
 
     /**
+     * Returns whether or not the typist has just made a mistype
+     * Returns true if typist has mistyped, otherwise it returns false
+     * 
+     * @return whether or not typist has mistyped as a boolean
+     */
+    public boolean getRecentMistype() {
+        return this.justMistyped;
+    }
+
+    /**
      * Resets the typist to their initial state, ready for a new race.
      * Progress returns to zero, burnout is cleared entirely.
      */
@@ -199,6 +211,15 @@ public class Typist
     public void setSymbol(char newSymbol)
     {
         this.symbol = newSymbol;
+    }
+
+    /**
+     * Sets the boolean flag determining if a typist has just mistyped
+     * 
+     * @param mistypeOrNot boolean value representing mistype
+     */
+    public void setMistype(boolean mistypeOrNot) {
+        this.justMistyped = mistypeOrNot;
     }
 
 }

@@ -180,6 +180,7 @@ public class TypingRace
         if (Math.random() < (1.0 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE) // Corrected probability calculation
         {
             theTypist.slideBack(SLIDE_BACK_AMOUNT);
+            theTypist.setMistype(true); // Setting justMistyped to true, so next turn the indicator will be printed
         }
 
         // Burnout check — pushing too hard increases burnout risk
@@ -273,6 +274,12 @@ public class TypingRace
             spacesAfter--; // symbol + ~ together take two characters
         }
 
+        // Printing out indicator for a mistype according to legend
+        if (theTypist.getRecentMistype()) {
+            System.out.print("  [<]");
+            spacesAfter -= 5;
+        }
+
         multiplePrint(' ', spacesAfter);
         System.out.print('|');
         System.out.print(' ');
@@ -283,6 +290,13 @@ public class TypingRace
             System.out.print(theTypist.getName()
                 + " (Accuracy: " + theTypist.getAccuracy() + ")"
                 + " BURNT OUT (" + theTypist.getBurnoutTurnsRemaining() + " turns)");
+        }
+        else if (theTypist.getRecentMistype())
+        {
+            System.out.println(theTypist.getName() 
+                + "(Accuracy: " + theTypist.getAccuracy() + ")"
+                + " ← just mistyped");
+            theTypist.setMistype(false);
         }
         else
         {
