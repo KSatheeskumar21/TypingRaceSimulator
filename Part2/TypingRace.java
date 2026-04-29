@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.awt.SystemTray;
 import java.lang.Math;
 
 /**
@@ -15,9 +17,7 @@ import java.lang.Math;
 public class TypingRace
 {
     private int passageLength;   // Total characters in the passage to type
-    private Typist seat1Typist;
-    private Typist seat2Typist;
-    private Typist seat3Typist;
+    private ArrayList<Typist> typists;
 
     // Accuracy thresholds for mistype and burnout events
     // (Ty tuned these values "by feel". They may need adjustment.)
@@ -35,35 +35,17 @@ public class TypingRace
     public TypingRace(int passageLength)
     {
         this.passageLength = passageLength;
-        seat1Typist = null;
-        seat2Typist = null;
-        seat3Typist = null;
+        typists = new ArrayList<>();
     }
 
     /**
      * Seats a typist at the given seat number (1, 2, or 3).
      *
      * @param theTypist  the typist to seat
-     * @param seatNumber the seat to place them in (1–3)
      */
-    public void addTypist(Typist theTypist, int seatNumber)
+    public void addTypist(Typist theTypist)
     {
-        if (seatNumber == 1)
-        {
-            seat1Typist = theTypist;
-        }
-        else if (seatNumber == 2)
-        {
-            seat2Typist = theTypist;
-        }
-        else if (seatNumber == 3)
-        {
-            seat3Typist = theTypist;
-        }
-        else
-        {
-            System.out.println("Cannot seat typist at seat " + seatNumber + " — there is no such seat.");
-        }
+        typists.add(theTypist);
     }
 
     /**
@@ -82,45 +64,27 @@ public class TypingRace
         // Reset all typists to the start of the passage
         // (Ty was in a hurry here)
 
-        // Adding null checks to the resetToStart()
-        // calls for each typist
-        if (seat1Typist != null) {
-            seat1Typist.resetToStart();
-        }
-        if (seat2Typist != null) {
-            seat2Typist.resetToStart();
-        }
-        if (seat3Typist != null) {
-            seat3Typist.resetToStart(); // Resetting Typist 3 (not done originally)
+        for (Typist typist : typists) {
+            typist.resetToStart();
         }
 
         while (!finished)
         {
             // Advance each typist by one turn
 
-            // Modified to add null checks for each typist,
-            // ensuring an error is not thrown in the case
-            // the addTypist() method is not called for all
-            // three typists
-            if (seat1Typist != null) {
-                advanceTypist(seat1Typist);
-            }
-
-            if (seat2Typist != null) {
-                advanceTypist(seat2Typist);
-            }
-
-            if (seat3Typist != null) {
-                advanceTypist(seat3Typist);
+            for (Typist typist : typists) {
+                advanceTypist(typist);
             }
 
             // Print the current state of the race
             printRace();
 
             // Check if any typist has finished the passage
-            if ( raceFinishedBy(seat1Typist) || raceFinishedBy(seat2Typist) || raceFinishedBy(seat3Typist) )
-            {
-                finished = true;
+            for (Typist typist : typists) {
+                if (raceFinishedBy(typist)) {
+                    finished = true;
+                    winner = typist;
+                }
             }
 
             // Wait 200ms between turns so the animation is visible
@@ -132,13 +96,7 @@ public class TypingRace
         // DONE (Task 2a): Print the winner's name here
 
         // Printed winner's name and display increased accuracy
-        if (raceFinishedBy(seat1Typist)) {
-            winner = seat1Typist;
-        } else if (raceFinishedBy(seat2Typist)) {
-            winner = seat2Typist;
-        } else if (raceFinishedBy(seat3Typist)) {
-            winner = seat3Typist;
-        }
+        
 
         System.out.println("And the winner is... " + winner.getName() + "!");
 
@@ -223,22 +181,10 @@ public class TypingRace
         multiplePrint('=', passageLength + 3);
         System.out.println();
 
-        // Added null checks to ensure an error is not thrown
-        // when calling printSeat() for each typist
-        if (seat1Typist != null) {
-            printSeat(seat1Typist);
+        for (Typist typist : typists) {
+            printSeat(typist);
+            System.out.println();
         }
-        System.out.println();
-
-        if (seat2Typist != null) {
-            printSeat(seat2Typist);
-        }
-        System.out.println();
-        
-        if (seat3Typist != null) {
-            printSeat(seat3Typist);
-        }
-        System.out.println();
 
         multiplePrint('=', passageLength + 3);
         System.out.println();
@@ -318,6 +264,17 @@ public class TypingRace
             System.out.print(aChar);
             i = i + 1;
         }
+    }
+
+    public int getPassageLength() {
+        return passageLength;
+    }
+
+    public Typist getTypist(int seatNumber) {
+        if (index >= 0 && seatNumber < typists.size()) {
+            return typists.get(seatNumber);
+        }
+        return null;
     }
 
     public static void startRaceGUI() {
