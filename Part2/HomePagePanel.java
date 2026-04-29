@@ -75,6 +75,7 @@ public class HomePagePanel extends JPanel {
         JRadioButton medBtn = new JRadioButton("Medium (~80 chars)");
         JRadioButton longBtn = new JRadioButton("Long (~120 chars)");
         shortBtn.setSelected(true);
+        passage = SHORT_PASSAGE;
 
         // Link buttons together to prevent more than one being selected
         ButtonGroup btnGroup = new ButtonGroup();
@@ -341,8 +342,8 @@ public class HomePagePanel extends JPanel {
                 }
             }
 
-            // cards.add(new Panel2(passage, typists, autocorrect, caffeineMode). "RACE")
-            // layout.show(cards, "RACE")
+            cards.add(new RacePanel(cards, layout, passage, typists, autocorrectMode, caffeineMode), "RACE");
+            layout.show(cards, "RACE");
 
         });
 

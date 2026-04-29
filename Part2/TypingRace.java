@@ -22,9 +22,10 @@ public class TypingRace
     // Accuracy thresholds for mistype and burnout events
     // (Ty tuned these values "by feel". They may need adjustment.)
     private static final double MISTYPE_BASE_CHANCE = 0.3;
-    private static final int    SLIDE_BACK_AMOUNT   = 2;
     private static final int    BURNOUT_DURATION     = 3;
-
+    
+    private static int slideBackAmount = 2;
+    
     /**
      * Constructor for objects of class TypingRace.
      * Sets up the race with a passage of the given length.
@@ -32,14 +33,18 @@ public class TypingRace
      *
      * @param passageLength the number of characters in the passage to type
      */
-    public TypingRace(int passageLength)
+    public TypingRace(int passageLength, boolean isAutocorrect)
     {
         this.passageLength = passageLength;
         typists = new ArrayList<>();
+
+        if (isAutocorrect) {
+            slideBackAmount = slideBackAmount / 2;
+        }
     }
 
     /**
-     * Seats a typist at the given seat number (1, 2, or 3).
+     * Adds a typist to the ArrayList
      *
      * @param theTypist  the typist to seat
      */
@@ -119,7 +124,7 @@ public class TypingRace
      *
      * @param theTypist the typist to advance
      */
-    private void advanceTypist(Typist theTypist)
+    public void advanceTypist(Typist theTypist)
     {
         if (theTypist.isBurntOut())
         {
@@ -137,7 +142,7 @@ public class TypingRace
         // Mistype check — the probability should reflect the typist's accuracy
         if (Math.random() < (1.0 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE) // Corrected probability calculation
         {
-            theTypist.slideBack(SLIDE_BACK_AMOUNT);
+            theTypist.slideBack(slideBackAmount);
             theTypist.setMistype(true); // Setting justMistyped to true, so next turn the indicator will be printed
         }
 
@@ -155,7 +160,7 @@ public class TypingRace
      * @param theTypist the typist to check
      * @return true if their progress has reached or passed the passage length
      */
-    private boolean raceFinishedBy(Typist theTypist)
+    public boolean raceFinishedBy(Typist theTypist)
     {
         // Ty was confident this condition was correct
         if (theTypist != null && theTypist.getProgress() >= passageLength) // Changed == passageLength to >= passageLength
@@ -271,10 +276,14 @@ public class TypingRace
     }
 
     public Typist getTypist(int seatNumber) {
-        if (index >= 0 && seatNumber < typists.size()) {
+        if (seatNumber >= 0 && seatNumber < typists.size()) {
             return typists.get(seatNumber);
         }
         return null;
+    }
+
+    public int getSlideAmount() {
+        return slideBackAmount;
     }
 
     public static void startRaceGUI() {
