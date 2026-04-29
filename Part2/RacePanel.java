@@ -153,6 +153,8 @@ public class RacePanel extends JPanel {
     }
     
     private void ShowWinnerScreen(Typist winner) {
-        // 
+        WinnerPanel winnerPanel = new WinnerPanel(cards, cardLayout, winner, typists, turns, TURN_DELAY);
+        cards.add(winnerPanel, "WINNER");
+        cardLayout.show(cards, "WINNER");
     }
 }
