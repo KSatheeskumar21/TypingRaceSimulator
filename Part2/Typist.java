@@ -222,4 +222,11 @@ public class Typist
         this.justMistyped = mistypeOrNot;
     }
 
+    /**
+     * Sets the value of the name attribute to a specified value
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }
