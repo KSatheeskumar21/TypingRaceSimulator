@@ -319,8 +319,13 @@ public class TypingRace
             i = i + 1;
         }
     }
-    
+
+    public static void startRaceGUI() {
+        TypingRaceGUI gui = new TypingRaceGUI();
+        gui.launch();
+    }
+
     public static void main(String[] args) {
-        return;
+        startRaceGUI();
     }
 }
