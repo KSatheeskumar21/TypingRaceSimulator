@@ -24,7 +24,7 @@ public class TypingRace
     private static final double MISTYPE_BASE_CHANCE = 0.3;
     private static final int    BURNOUT_DURATION     = 3;
     
-    private static int slideBackAmount = 2;
+    private int slideBackAmount = 2;
     
     /**
      * Constructor for objects of class TypingRace.
@@ -140,7 +140,11 @@ public class TypingRace
         }
 
         // Mistype check — the probability should reflect the typist's accuracy
-        if (Math.random() < (1.0 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE) // Corrected probability calculation
+        double mistypeChance = (1.0 - theTypist.getAccuracy()) * MISTYPE_BASE_CHANCE;
+        if (theTypist.hasAccessory(2)) {
+            mistypeChance = Math.max(0, mistypeChance - 0.05);
+        }
+        if (Math.random() < mistypeChance) // Corrected probability calculation
         {
             theTypist.slideBack(slideBackAmount);
             theTypist.setMistype(true); // Setting justMistyped to true, so next turn the indicator will be printed
@@ -150,6 +154,10 @@ public class TypingRace
         // (probability scales with accuracy squared, capped at ~0.05)
         if (Math.random() < 0.05 * theTypist.getAccuracy() * theTypist.getAccuracy())
         {
+            int duration = BURNOUT_DURATION;
+            if (theTypist.hasAccessory(0)) {
+                duration = Math.max(1, duration - 1);
+            }
             theTypist.burnOut(BURNOUT_DURATION);
         }
     }

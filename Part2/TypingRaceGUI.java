@@ -10,6 +10,7 @@ public class TypingRaceGUI extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel cards;
+    private Leaderboard leaderboard;
 
     public TypingRaceGUI() {
         setTitle(WINDOW_TITLE);
@@ -18,9 +19,9 @@ public class TypingRaceGUI extends JFrame {
 
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
+        leaderboard = new Leaderboard();
 
-        cards.add(new HomePagePanel(cards, cardLayout), "HOME");
-        // ...
+        cards.add(new HomePagePanel(cards, cardLayout, leaderboard), "HOME");
 
         add(cards);
     }

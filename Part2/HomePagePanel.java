@@ -21,13 +21,22 @@ public class HomePagePanel extends JPanel {
     // Attribute fields to be passed to other parts of the GUI
     private String passage;
     private List<Typist> typists;
+    private List<Typist> playingTypists;
     private List<JPanel> typistRows;
     private boolean autocorrectMode = false;
     private boolean caffeineMode = false;
     private boolean nightShift = false;
+
+    private JPanel cards;
+    private CardLayout layout;
+    private Leaderboard leaderboard;
     
-    public HomePagePanel(JPanel cards, CardLayout layout) {
+    public HomePagePanel(JPanel cards, CardLayout layout, Leaderboard leaderboard) {
         
+        this.cards = cards;
+        this.layout = layout;
+        this.leaderboard = leaderboard;
+
         setLayout(new BorderLayout(0, 16));
         setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
 
@@ -50,7 +59,7 @@ public class HomePagePanel extends JPanel {
         southSection.setLayout(new BoxLayout(southSection, BoxLayout.Y_AXIS)); 
         southSection.add(buildModifiersPanel());
         southSection.add(Box.createVerticalStrut(12));
-        southSection.add(buildStartButton(cards, layout));
+        southSection.add(buildStartButton());
 
         // Container for Center and South sections
         JPanel container = new JPanel(new BorderLayout(0, 16));
@@ -215,11 +224,13 @@ public class HomePagePanel extends JPanel {
 
         // Default number of typists is 3, display available typists accordingly
         updateVisibleRows(DEFAULT_NUMBER_OF_TYPISTS);
+        playingTypists = getTypists(DEFAULT_NUMBER_OF_TYPISTS);
 
         // Update visible rows when number of typists is changed
         seatSpinner.addChangeListener(e -> {
             int count = (int) seatSpinner.getValue();
             updateVisibleRows(count);
+            playingTypists = getTypists(count);
         });
 
         typistsPanel.add(seatPanel, BorderLayout.NORTH);
@@ -256,10 +267,20 @@ public class HomePagePanel extends JPanel {
         accSpinner.setPreferredSize(new Dimension(60, 24));
         accSpinner.addChangeListener(e -> t.setAccuracy((double) accSpinner.getValue()));
 
+        // Button to customise typist
+        JButton customButton = new JButton("Customise");
+        customButton.setFont(new Font("Arial", Font.PLAIN, 11));
+        customButton.addActionListener(e -> {
+            String panelName = "CUSTOM_" + t.getName();
+            cards.add(new TypistCustomPanel(cards, layout, t), panelName);
+            layout.show(cards, panelName);
+        });
+
         row.add(symLabel);
         row.add(nameField);
         row.add(accLabel);
         row.add(accSpinner);
+        row.add(customButton);
 
         return row;
     }
@@ -317,7 +338,7 @@ public class HomePagePanel extends JPanel {
         return modifierPanel;
     }
     
-    private JButton buildStartButton(JPanel cards, CardLayout layout) {
+    private JButton buildStartButton() {
         JButton startButton = new JButton("Start Race");
 
         startButton.setFont(new Font("Arial", Font.BOLD, 16));
@@ -342,7 +363,7 @@ public class HomePagePanel extends JPanel {
                 }
             }
 
-            cards.add(new RacePanel(cards, layout, passage, typists, autocorrectMode, caffeineMode), "RACE");
+            cards.add(new RacePanel(cards, layout, passage, playingTypists, autocorrectMode, caffeineMode, leaderboard), "RACE");
             layout.show(cards, "RACE");
 
         });

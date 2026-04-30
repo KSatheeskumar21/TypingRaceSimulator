@@ -2,7 +2,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RacePanel extends JPanel {
     private static final int TURN_DELAY = 200;
@@ -15,25 +17,32 @@ public class RacePanel extends JPanel {
 
     private final JPanel cards;
     private final CardLayout cardLayout;
+    private final Leaderboard leaderboard;
+    private final Map<String, Integer> burnoutCounts = new HashMap<>();
 
     private JPanel passagePane;
     private Timer timer;
     private int turns = 0;
 
     public RacePanel(JPanel cards, CardLayout layout, String passage,
-            List<Typist> typists, boolean autocorrectEnabled, boolean caffeineModeEnabled) {
+            List<Typist> typists, boolean autocorrectEnabled, boolean caffeineModeEnabled, Leaderboard leaderboard) {
         this.cards = cards;
         this.cardLayout = layout;
         this.passage = passage;
         this.typists = typists;
         this.autocorrect = autocorrectEnabled;
         this.caffeineMode = caffeineModeEnabled;
+        this.leaderboard = leaderboard;
 
         // Create TypingRace object to handle simulation logic
         race = new TypingRace(passage.length(), autocorrectEnabled);
         for (int i = 0; i < typists.size(); i++) {
             typists.get(i).resetToStart();
             race.addTypist(typists.get(i));
+        }
+
+        for (Typist t : typists) {
+            burnoutCounts.put(t.getName(), 0);
         }
 
         setLayout(new BorderLayout(0, 10));
@@ -127,13 +136,31 @@ public class RacePanel extends JPanel {
                     if (turns == 1) {
                         t.setAccuracy(t.getAccuracy() + 0.1);
                     } else if (turns == 11) {
-                        t.setAccuracy(t.getAccuracy() - 0.15);
+                        t.setAccuracy(t.getAccuracy() - 0.10);
+                    }
+                }
+            }
+
+            int halfway = passage.length() / 2;
+            for (Typist t : typists) {
+                if (t.hasAccessory(1)) {
+                    if (t.hasAccessory(1)) {
+                        if (turns == 1) {
+                            t.setAccuracy(t.getAccuracy() + 0.10);
+                        } else if (turns == halfway) {
+                            t.setAccuracy(t.getAccuracy() - 0.20);
+                        }
                     }
                 }
             }
 
             for (Typist t : typists) {
+                boolean wasBurntOut = t.isBurntOut();
                 race.advanceTypist(t);
+                
+                if (!wasBurntOut && t.isBurntOut()) {
+                    burnoutCounts.merge(t.getName(), 1, Integer::sum);
+                }
             }
 
             updatePassageDisplay();
@@ -153,7 +180,7 @@ public class RacePanel extends JPanel {
     }
     
     private void ShowWinnerScreen(Typist winner) {
-        WinnerPanel winnerPanel = new WinnerPanel(cards, cardLayout, winner, typists, turns, TURN_DELAY);
+        WinnerPanel winnerPanel = new WinnerPanel(cards, cardLayout, winner, typists, turns, TURN_DELAY, leaderboard, burnoutCounts);
         cards.add(winnerPanel, "WINNER");
         cardLayout.show(cards, "WINNER");
     }

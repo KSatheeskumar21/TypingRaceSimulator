@@ -25,6 +25,11 @@ public class Typist
     private double accuracy;
     private int burntTurnsLeft;
 
+    // Adding fields to handle customisation for typists in GUI
+    private int typingStyle = 0;
+    private int keyboardType = 0;
+    private boolean[] accessories = new boolean[3];
+
 
 
     // Constructor of class Typist
@@ -141,6 +146,22 @@ public class Typist
         return this.justMistyped;
     }
 
+    public int getTypingStyle() {
+        return this.typingStyle;
+    }
+
+    public int getKeyboardType() {
+        return this.keyboardType;
+    }
+
+    public boolean[] getAccessories() {
+        return this.accessories;
+    }
+
+    public boolean hasAccessory(int index) {
+        return accessories[index];
+    }
+
     /**
      * Resets the typist to their initial state, ready for a new race.
      * Progress returns to zero, burnout is cleared entirely.
@@ -227,6 +248,18 @@ public class Typist
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setTypingStyle(int style) {
+        this.typingStyle = style;
+    }
+
+    public void setKeyboardType(int type) {
+        this.keyboardType = type;
+    }
+
+    public void setAccessories(boolean[] acc) {
+        this.accessories = acc;
     }
 
 }
